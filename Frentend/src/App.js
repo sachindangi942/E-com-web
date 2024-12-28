@@ -15,8 +15,8 @@ import CreateUser from "./components/UserComponets/CreateUser";
 import Showusers from "./components/UserComponets/Showusers";
 import Spiner from "./components/Spiner";
 import ForgotPassword from "./components/PasswordAPI/ForgotPassword";
-import { Getcart } from "./components/Cart/Getcart";
 import { ChangePassword } from "./components/PasswordAPI/ChangePassword";
+import { Cart } from "./components/Cart/Cart";
 
 function App() {
   const { loading } = useSelector(state => state.alert);
@@ -74,7 +74,7 @@ function App() {
           } />
           <Route path="/cartdata" element={
             <ProtectedRoute>
-              <Getcart />
+              <Cart/>
             </ProtectedRoute>
           } />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
