@@ -109,6 +109,7 @@ import { jwtDecode } from "jwt-decode";
 import { hideloading, showloading } from "../../Redux/AlertSclice";
 import { MdAddShoppingCart } from "react-icons/md";
 import { Popconfirm, Drawer, } from "antd";
+import { clearCart } from "../../Redux/Fetures/CartSlice";
 
 function HeaderNav() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -144,6 +145,7 @@ function HeaderNav() {
   const handleLogout = () => {
     dispatch(showloading());
     dispatch(clearToken());
+    dispatch(clearCart());
     setIsAuthenticated(false);
     dispatch(hideloading());
   };

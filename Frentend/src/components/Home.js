@@ -6,6 +6,7 @@ import './Home.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { DOMAIN } from './MyForms/Configs';
 import { addToCart} from '../Redux/Fetures/CartSlice';
+import { fetchCartData } from './Utils/CartApiUtils';
 const { Meta } = Card;
 
 export const Home = () => {
@@ -15,7 +16,6 @@ export const Home = () => {
   let token = useSelector((state) => state.auth.token);
   token = JSON.parse(token);
   const dispatch = useDispatch();
-
 
   const productData = useCallback(async () => {
     try {
@@ -34,9 +34,17 @@ export const Home = () => {
       });
     }
   }, []);
+
+const CartData =useCallback( async()=>{
+  const {updatedData} = await fetchCartData(token,DOMAIN);
+   updatedData.forEach((product)=>dispatch(addToCart(product)))
+
+},[dispatch,token]);
+
   useEffect(() => {
     productData();
-  }, [productData]);
+    CartData();
+  }, [productData,CartData]);
 
   const AddToCard = async ({ _id, name, price, description, image }) => {
     let CartProduct = { name, price, description, _id ,image};
@@ -51,6 +59,7 @@ export const Home = () => {
         }
       );
       dispatch(addToCart(res?.data));
+      console.log("addtocart responsedata",res.data)
       notification.success({
         message: 'Product Added',
         description: 'Product added to cart',

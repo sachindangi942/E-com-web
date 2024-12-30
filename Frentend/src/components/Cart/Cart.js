@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, } from 'react';
 import { DOMAIN } from '../MyForms/Configs';
 import { Col, Container, Row } from 'react-bootstrap';
 import { Button, Card, notification, Spin } from 'antd';
@@ -7,6 +7,7 @@ import { PlusOutlined, MinusOutlined, DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeFromCart } from '../../Redux/Fetures/CartSlice';
+import { fetchCartData } from '../Utils/CartApiUtils';
 
 export const Cart = () => {
     const dispatch = useDispatch();
@@ -16,27 +17,23 @@ export const Cart = () => {
     const [loading, setLoading] = useState(false);
     const [totalBill, setTotalBill] = useState(0);
 
-    const productData = useCallback(async () => {
-        try {
-            setLoading(true);
-            const res = await axios.get(`${DOMAIN}products/cartData`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            const updatedData = res.data.map(item => ({ ...item, quantity: 1 }));
-            setCardData(updatedData);
-            const bill = updatedData.reduce((sum, item) => sum + item.price, 0);
-            setTotalBill(bill);
-            setLoading(false);
-        } catch (error) {
-            console.error("Error fetching products:", error);
-        }
-    }, [token]);
-
     useEffect(() => {
-        productData();
-    }, [productData]);
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                const { updatedData, totalBill } = await fetchCartData(token, DOMAIN);
+                setTotalBill(totalBill);
+                setCardData(updatedData);
+                setLoading(false);
+
+            } catch (error) {
+                console.log("fetchin cart data error", error);
+                setLoading(false);
+            }
+        }
+        fetchData();
+    }, [token])
+
 
     const handleQuantityChange = (id, delta) => {
         setCardData(prevData => {
@@ -66,8 +63,12 @@ export const Cart = () => {
                 placement: 'topRight',
                 duration: 3,
             });
+            setCardData((prevData)=>{
+               const updatedData =  prevData.filter(item => item._id !== _id);
+               setTotalBill(updatedData.reduce((sum,item)=>sum+item.price * item.quantity,0));
+               return updatedData
+            });
             dispatch(removeFromCart(_id));
-            productData();
         } catch (err) {
             notification.error({
                 message: 'serwer Err',
