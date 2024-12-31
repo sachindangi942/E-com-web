@@ -63,3 +63,16 @@ exports.RemoveCart_controler = async (req, res) => {
         res.status(401).send(err)
     }
 };
+
+exports.UpdateProductQuantity = async (req, res) => {
+    const { _id, quantity } = req.body
+    try {
+        const product = await Card_schema.findById(_id,);
+        if (!product) return res.status(401).send("Product not found");
+        product.quantity += quantity
+        const updatedQuantity = await product.save();
+        res.send(updatedQuantity);
+    } catch (error) {
+        res.status(401).send(error);
+    }
+}

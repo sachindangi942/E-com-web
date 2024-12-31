@@ -2,7 +2,8 @@ const { GetCart_controler,
     RemoveCart_controler,
     AddToCard_controler,
     AddProduct_controler,
-    GetProduct_controler
+    GetProduct_controler,
+    UpdateProductQuantity
 } = require("../controlers/Product_controler");
 const { check_token } = require("../Middleware/authMiddleware");
 const { validate } = require("../Middleware/validationMiddleware");
@@ -16,5 +17,6 @@ Router.get("/getProducts",GetProduct_controler);
 Router.post("/addToCard", validate(AddToCardSchema), AddToCard_controler);
 Router.get("/cartData", GetCart_controler);
 Router.post("/removecart", check_token, RemoveCart_controler);
+Router.post("/updateProductQuantity",check_token,UpdateProductQuantity)
 
 module.exports = Router;

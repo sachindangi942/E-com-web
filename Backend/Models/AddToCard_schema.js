@@ -20,7 +20,10 @@ const CardSchema = new mongoose.Schema({
 
     },
     Add_By:{type:String},
-    id:{type:Number}
+    id:{type:Number},
+    quantity:{type:Number,
+      default:1
+    }
   });
 
   const Card_schema =  mongoose.model("AddToCard", CardSchema);

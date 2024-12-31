@@ -7,7 +7,7 @@ import { PlusOutlined, MinusOutlined, DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeFromCart } from '../../Redux/Fetures/CartSlice';
-import { fetchCartData } from '../Utils/CartApiUtils';
+import { fetchCartData, updateProductQuantity } from '../Utils/CartApiUtils';
 
 export const Cart = () => {
     const dispatch = useDispatch();
@@ -35,20 +35,24 @@ export const Cart = () => {
     }, [token])
 
 
-    const handleQuantityChange = (id, delta) => {
-        setCardData(prevData => {
-            const updatedData = prevData.map(item => {
-                if (item._id === id) {
-                    const newQuantity = Math.max(1, item.quantity + delta);
-                    return { ...item, quantity: newQuantity };
-                }
-                return item;
-            });
-            const newTotalBill = updatedData.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            setTotalBill(newTotalBill);
-            return updatedData;
-        });
-    };
+const handleQuantityChange =async(_id,delta)=>{
+    await updateProductQuantity(_id,delta,token,DOMAIN,setCardData,setTotalBill);
+}
+
+    // const handleQuantityChange = (id, delta) => {
+    //     setCardData(prevData => {
+    //         const updatedData = prevData.map(item => {
+    //             if (item._id === id) {
+    //                 const newQuantity = Math.max(1, item.quantity + delta);
+    //                 return { ...item, quantity: newQuantity };
+    //             }
+    //             return item;
+    //         });
+    //         const newTotalBill = updatedData.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    //         setTotalBill(newTotalBill);
+    //         return updatedData;
+    //     });
+    // };
 
     const RemoveProducts = async ({ _id }) => {
         try {
