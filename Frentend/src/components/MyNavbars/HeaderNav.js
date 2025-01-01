@@ -272,6 +272,7 @@ function HeaderNav() {
     dispatch(clearCart());
     setIsAuthenticated(false);
     dispatch(hideloading());
+   
   };
 
   const showDrawer = () => {
@@ -340,7 +341,6 @@ function HeaderNav() {
         </Navbar.Collapse>
       </Container>
 
-      {/* Account Drawer */}
       <Drawer
         title="User Menu"
         placement="right"

@@ -1,6 +1,7 @@
 import { notification } from 'antd';
 import axios from 'axios';
 
+
 export const fetchCartData = async (token, DOMAIN) => {
     try {
         const res = await axios.get(`${DOMAIN}products/cartData`, {

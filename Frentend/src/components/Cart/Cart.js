@@ -1,7 +1,7 @@
 import React, { useEffect, useState, } from 'react';
 import { DOMAIN } from '../MyForms/Configs';
 import { Col, Container, Row } from 'react-bootstrap';
-import { Button, Card, notification, Spin } from 'antd';
+import { Button, Card, Image, notification, Popconfirm, Spin } from 'antd';
 import Meta from 'antd/es/card/Meta';
 import { PlusOutlined, MinusOutlined, DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
@@ -35,24 +35,9 @@ export const Cart = () => {
     }, [token])
 
 
-const handleQuantityChange =async(_id,delta)=>{
-    await updateProductQuantity(_id,delta,token,DOMAIN,setCardData,setTotalBill);
-}
-
-    // const handleQuantityChange = (id, delta) => {
-    //     setCardData(prevData => {
-    //         const updatedData = prevData.map(item => {
-    //             if (item._id === id) {
-    //                 const newQuantity = Math.max(1, item.quantity + delta);
-    //                 return { ...item, quantity: newQuantity };
-    //             }
-    //             return item;
-    //         });
-    //         const newTotalBill = updatedData.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    //         setTotalBill(newTotalBill);
-    //         return updatedData;
-    //     });
-    // };
+    const handleQuantityChange = async (_id, delta) => {
+        await updateProductQuantity(_id, delta, token, DOMAIN, setCardData, setTotalBill);
+    }
 
     const RemoveProducts = async ({ _id }) => {
         try {
@@ -67,10 +52,10 @@ const handleQuantityChange =async(_id,delta)=>{
                 placement: 'topRight',
                 duration: 3,
             });
-            setCardData((prevData)=>{
-               const updatedData =  prevData.filter(item => item._id !== _id);
-               setTotalBill(updatedData.reduce((sum,item)=>sum+item.price * item.quantity,0));
-               return updatedData
+            setCardData((prevData) => {
+                const updatedData = prevData.filter(item => item._id !== _id);
+                setTotalBill(updatedData.reduce((sum, item) => sum + item.price * item.quantity, 0));
+                return updatedData
             });
             dispatch(removeFromCart(_id));
         } catch (err) {
@@ -90,19 +75,20 @@ const handleQuantityChange =async(_id,delta)=>{
                 </div>
             ) : (
                 <Row>
-                    <Col xs={12} sm={8} md={8} lg={8}>
+                    <Col xs={12} sm={6} md={6} lg={6} >
                         <Row className="g-4">
                             {cartData.map((obj, index) => (
-                                <Col xs={12} key={index}>
+                                <Col xs={12} key={index} >
                                     <Card
                                         hoverable
                                         className="product-card shadow-sm rounded "
                                         cover={
-                                            <img
+                                            <Image
+                                                height={200}
+                                                width="100%"
                                                 alt={obj.name}
                                                 src={obj.image}
-                                                className="w-100"
-                                                style={{ height: '200px', objectFit: 'cover' }}
+                                                style={{ objectFit: 'fill' }}
                                             />
                                         }
                                     >
@@ -122,12 +108,18 @@ const handleQuantityChange =async(_id,delta)=>{
                                                     onClick={() => handleQuantityChange(obj._id, -1)}
                                                 />
                                             ) : (
-                                                <Button
-                                                    icon={<DeleteOutlined />}
-                                                    type="primary"
-                                                    danger
-                                                    onClick={() => RemoveProducts(obj)}
-                                                />
+                                                <Popconfirm
+                                                    title="Are you sure you want to Remove Product?"
+                                                    onConfirm={() => RemoveProducts(obj)}
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                >
+                                                    <Button
+                                                        icon={<DeleteOutlined />}
+                                                        type="primary"
+                                                        danger
+                                                    />
+                                                </Popconfirm>
                                             )}
                                             <div className="px-3 fw-bold text-secondary">
                                                 {obj.quantity}
@@ -143,7 +135,7 @@ const handleQuantityChange =async(_id,delta)=>{
                             ))}
                         </Row>
                     </Col>
-                    <Col xs={12} sm={4} md={4} lg={4}>
+                    <Col xs={12} sm={6} md={6} lg={6}>
                         <div className="p-3 shadow-sm rounded bg-light">
                             <h4 className="text-center text-dark mb-3">Total Bill</h4>
                             <p className="fs-5 fw-bold text-center text-danger">

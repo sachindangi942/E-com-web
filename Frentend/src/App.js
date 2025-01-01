@@ -17,6 +17,7 @@ import Spiner from "./components/Spiner";
 import ForgotPassword from "./components/PasswordAPI/ForgotPassword";
 import { ChangePassword } from "./components/PasswordAPI/ChangePassword";
 import { Cart } from "./components/Cart/Cart";
+import { ViewDetails } from "./pages/ViewDetails";
 
 function App() {
   const { loading } = useSelector(state => state.alert);
@@ -74,7 +75,12 @@ function App() {
           } />
           <Route path="/cartdata" element={
             <ProtectedRoute>
-              <Cart/>
+              <Cart />
+            </ProtectedRoute>
+          } />
+          <Route path="/viewDetails" element={
+            <ProtectedRoute>
+              <ViewDetails/>
             </ProtectedRoute>
           } />
           <Route path="/forgotPassword" element={<ForgotPassword />} />

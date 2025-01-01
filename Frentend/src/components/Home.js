@@ -1,21 +1,25 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, Card, notification, Spin } from 'antd';
+import { Button, Card, Image, notification, Spin } from 'antd';
 import { Container, Row, Col } from 'react-bootstrap';
 import './Home.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { DOMAIN } from './MyForms/Configs';
-import { addToCart} from '../Redux/Fetures/CartSlice';
+import { addToCart } from '../Redux/Fetures/CartSlice';
 import { fetchCartData } from './Utils/CartApiUtils';
+import { Details } from '../Redux/Fetures/CartSlice';
+import { useNavigate } from 'react-router-dom';
+import { AddToCardUtil } from './Utils/AddToCartUtils';
 const { Meta } = Card;
 
 export const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const cartData = useSelector((state)=>state.cart.Product.map(({_id})=>_id));
+  const cartData = useSelector((state) => state.cart.Product.map(({ _id }) => _id));
   let token = useSelector((state) => state.auth.token);
   token = JSON.parse(token);
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const productData = useCallback(async () => {
     try {
@@ -35,39 +39,28 @@ export const Home = () => {
     }
   }, []);
 
-const CartData =useCallback( async()=>{
-  const {updatedData} = await fetchCartData(token,DOMAIN);
-   updatedData.forEach((product)=>dispatch(addToCart(product)))
+  const CartData = useCallback(async () => {
+    const { updatedData } = await fetchCartData(token, DOMAIN);
+    updatedData.forEach((product) => dispatch(addToCart(product)))
 
-},[dispatch,token]);
+  }, [dispatch, token]);
 
-  useEffect(() => {
-    productData();
-    CartData();
-  }, [productData,CartData]);
+  const ViewDetails = useCallback(async (productDetails) => {
+    dispatch(Details(productDetails));
+    navigate("/viewDetails")
+  }, [dispatch, navigate]);
 
-  const AddToCard = async ({ _id, name, price, description, image }) => {
-    let CartProduct = { name, price, description, _id ,image};
+  const handleAddToCard = useCallback(async (obj) => {
     try {
-     const res =  await axios.post(
-        `${DOMAIN}products/addToCard`,
-        CartProduct,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      dispatch(addToCart(res?.data));
-      console.log("addtocart responsedata",res.data)
+      const { data } = await AddToCardUtil(DOMAIN, token, obj);
+      dispatch(addToCart(data));
       notification.success({
         message: 'Product Added',
         description: 'Product added to cart',
         placement: 'topRight',
         duration: 3,
       });
-    } catch (err) {
-      console.log(err)
+    } catch (error) {
       notification.error({
         message: 'Server Error',
         description: 'Something went wrong',
@@ -75,7 +68,13 @@ const CartData =useCallback( async()=>{
         duration: 3,
       });
     }
-  };
+  }, [token, dispatch])
+
+  useEffect(() => {
+    productData();
+    CartData();
+  }, [productData, CartData]);
+
   return (
     <Container className="mt-4">
       {loading ? (
@@ -85,6 +84,7 @@ const CartData =useCallback( async()=>{
       ) : (
         <Row className="g-4">
           {products.map((obj, index) => (
+
             <Col xs={12} sm={6} md={4} lg={3} key={index}>
               <Card
                 hoverable
@@ -96,10 +96,12 @@ const CartData =useCallback( async()=>{
                   overflow: 'hidden',
                 }}
                 cover={
-                  <img
+                  <Image
+                    width="100%"
+                    height={200}
                     alt={obj.name}
                     src={obj.image}
-                    style={{ width: '100%', height: '200px', objectFit: 'fill' }}
+                  style={{ objectFit: 'fill' }}
                   />
                 }
               >
@@ -126,17 +128,18 @@ const CartData =useCallback( async()=>{
                   }}
                 >
                   <Button
-                    disabled={Object.values( cartData).includes(obj._id)}
+                    disabled={Object.values(cartData).includes(obj._id)}
                     style={{ flex: 1, marginRight: 5 }}
                     className="btn-add-cart"
-                    onClick={() => AddToCard(obj)}
+                    onClick={() => handleAddToCard(obj)}
                   >
-                    {Object.values( cartData).includes(obj._id) ? 'Added' : 'Add to Cart'}
+                    {Object.values(cartData).includes(obj._id) ? 'Added' : 'Add to Cart'}
                   </Button>
                   <Button
                     type="default"
                     style={{ flex: 1 }}
                     className="btn-view-details"
+                    onClick={() => ViewDetails(obj)}
                   >
                     View Details
                   </Button>
