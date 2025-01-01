@@ -7,7 +7,7 @@ import HeaderNav from "./components/MyNavbars/HeaderNav";
 import { useSelector } from "react-redux";
 import { PublicRoute } from "./components/PublicRoute";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import { Home } from "./components/Home";
+import { Home } from "./pages/Home";
 import AddProduct from "./components/Products/AddProduct";
 import { ProductList } from "./components/Products/ProductList";
 // import Logout from "./components/Logout";
@@ -16,7 +16,7 @@ import Showusers from "./components/UserComponets/Showusers";
 import Spiner from "./components/Spiner";
 import ForgotPassword from "./components/PasswordAPI/ForgotPassword";
 import { ChangePassword } from "./components/PasswordAPI/ChangePassword";
-import { Cart } from "./components/Cart/Cart";
+import { Cart } from "./pages/Cart";
 import { ViewDetails } from "./pages/ViewDetails";
 
 function App() {

@@ -4,12 +4,12 @@ import { Button, Card, Image, notification, Spin } from 'antd';
 import { Container, Row, Col } from 'react-bootstrap';
 import './Home.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { DOMAIN } from './MyForms/Configs';
+import { DOMAIN } from '../components/MyForms/Configs';
 import { addToCart } from '../Redux/Fetures/CartSlice';
-import { fetchCartData } from './Utils/CartApiUtils';
+import { fetchCartData } from '../components/Utils/CartApiUtils';
 import { Details } from '../Redux/Fetures/CartSlice';
 import { useNavigate } from 'react-router-dom';
-import { AddToCardUtil } from './Utils/AddToCartUtils';
+import { AddToCardUtil } from '../components/Utils/AddToCartUtils';
 const { Meta } = Card;
 
 export const Home = () => {

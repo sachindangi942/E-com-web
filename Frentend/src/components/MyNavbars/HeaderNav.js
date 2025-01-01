@@ -198,7 +198,7 @@
 //         visible={isDrawerVisible}
 //       >
 //         <Nav className="flex-column">
-          
+
 //           <Nav.Link as={Link} to="/settings" onClick={closeDrawer} className="text-primary">Settings</Nav.Link>
 //           <Nav.Link as={Link} to="/help" onClick={closeDrawer} className="text-primary">Help</Nav.Link>
 //           <Nav.Link as={Link} to="/changePassword" onClick={closeDrawer} className="text-primary">Change Password</Nav.Link>
@@ -225,17 +225,19 @@ import React, { useState, useEffect, useCallback } from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import { Drawer, Popconfirm } from "antd";
+import { Badge, Drawer, Popconfirm } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { MdAddShoppingCart } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { clearToken } from "../../Redux/Fetures/Authslice";
 import { clearCart } from "../../Redux/Fetures/CartSlice";
 import { showloading, hideloading } from "../../Redux/AlertSclice";
-import {jwtDecode} from "jwt-decode"
+import { jwtDecode } from "jwt-decode"
 import "./headerStyle.css";
 
 function HeaderNav() {
+  const cartData = useSelector(state => state.cart.Product);
+  console.log("cartData",cartData)
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const token = useSelector((state) => state.auth.token);
@@ -268,11 +270,12 @@ function HeaderNav() {
 
   const handleLogout = () => {
     dispatch(showloading());
+    navigate("/singIn")
     dispatch(clearToken());
     dispatch(clearCart());
     setIsAuthenticated(false);
     dispatch(hideloading());
-   
+
   };
 
   const showDrawer = () => {
@@ -286,7 +289,7 @@ function HeaderNav() {
   return (
     <Navbar expand="lg" className="mb-4 shadow-sm p-3 bg-light">
       <Container fluid>
-       
+
         <Navbar.Brand as={Link} to="/" className="fw-bold text-primary">
           MyShop
         </Navbar.Brand>
@@ -321,13 +324,18 @@ function HeaderNav() {
               </>
             ) : (
               <>
-        
+
                 <Nav.Link
                   as={Link}
                   to="/cartdata"
                   className="d-flex"
                 >
-                  <MdAddShoppingCart className="fs-3 text-dark" />
+                  <Badge count={cartData.length}
+                    color={cartData.length === 0 ? "#d9d9d9" : "#ff4d4f"}
+                    showZero
+                  >
+                    <MdAddShoppingCart className="fs-3 text-dark" />
+                  </Badge>
                 </Nav.Link>
                 <div
                   onClick={showDrawer}
