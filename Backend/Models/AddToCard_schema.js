@@ -19,7 +19,7 @@ const CardSchema = new mongoose.Schema({
 
     },
     Add_By:{type:String},
-    id:{type:Number},
+    id:{type:String},
     quantity:{type:Number,
       default:1
     }

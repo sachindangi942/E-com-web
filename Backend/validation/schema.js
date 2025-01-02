@@ -56,7 +56,7 @@ exports.AddToCardSchema = Joi.object({
     price: Joi.number().required(),
     description: Joi.string().required(),
     image: Joi.string(),
-    _id:Joi.string().required()
+    id:Joi.string().required()
 
 
 });
