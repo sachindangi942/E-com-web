@@ -192,8 +192,8 @@ export const Cart = () => {
     const [cartData, setCardData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [totalBill, setTotalBill] = useState(0);
-    const [isModalVisible, setIsModalVisible] = useState(false); // State to control Modal visibility
-    const [productToRemove, setProductToRemove] = useState(null); // Store the product to be removed
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [productToRemove, setProductToRemove] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -216,19 +216,19 @@ export const Cart = () => {
     };
 
     const showModal = (product) => {
-        setProductToRemove(product);  // Set the product to be removed
-        setIsModalVisible(true);  // Show the modal
+        setProductToRemove(product);  
+        setIsModalVisible(true); 
     };
 
     const handleOk = async () => {
         if (productToRemove) {
-            await RemoveProducts(productToRemove);  // Call the function to remove product
+            await RemoveProducts(productToRemove); 
         }
-        setIsModalVisible(false);  // Hide the modal after confirmation
+        setIsModalVisible(false);  
     };
 
     const handleCancel = () => {
-        setIsModalVisible(false);  // Hide the modal if cancelled
+        setIsModalVisible(false);  
     };
 
     const RemoveProducts = async ({ _id }) => {
@@ -242,7 +242,7 @@ export const Cart = () => {
                 message: 'Item Removed',
                 description: 'Product removed from your cart.',
                 placement: 'topRight',
-                duration: 3,
+                duration: 2,
             });
             setCardData((prevData) => {
                 const updatedData = prevData.filter(item => item._id !== _id);
@@ -305,7 +305,7 @@ export const Cart = () => {
                                                     icon={<DeleteOutlined />}
                                                     type="primary"
                                                     danger
-                                                    onClick={() => showModal(obj)}  // Show modal on click
+                                                    onClick={() => showModal(obj)} 
                                                 />
                                             )}
                                             <div className="px-3 fw-bold text-secondary">

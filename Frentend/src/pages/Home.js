@@ -8,7 +8,7 @@ import { DOMAIN } from '../components/MyForms/Configs';
 import { addToCart } from '../Redux/Fetures/CartSlice';
 import { fetchCartData } from '../components/Utils/CartApiUtils';
 import { Details } from '../Redux/Fetures/CartSlice';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AddToCardUtil } from '../components/Utils/AddToCartUtils';
 const { Meta } = Card;
 
@@ -128,12 +128,18 @@ export const Home = () => {
                   }}
                 >
                   <Button
-                    disabled={Object.values(cartData).includes(obj._id)}
                     style={{ flex: 1, marginRight: 5 }}
                     className="btn-add-cart"
-                    onClick={() => handleAddToCard(obj)}
+                    onClick={() => {
+                      if(!Object.values(cartData).includes(obj._id))
+                     { handleAddToCard(obj)}
+                    }}
                   >
-                    {Object.values(cartData).includes(obj._id) ? 'Added' : 'Add to Cart'}
+                    {Object.values(cartData).includes(obj._id) ? <Link to={"/cartdata"}
+                    className='text-decoration-none'
+                    >
+                      View in Cart
+                    </Link> : 'Add to Cart'}
                   </Button>
                   <Button
                     type="default"

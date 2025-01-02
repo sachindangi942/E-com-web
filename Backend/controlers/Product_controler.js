@@ -30,8 +30,9 @@ exports.GetProduct_controler = async (req, res) => {
 
 exports.AddToCard_controler = async (req, res) => {
     try {
+        // console.log(req.body)
         let data = req.body
-        delete data.id;
+        // delete data._id;
         const { _id: Add_By } = getToken_data({ headers: req.headers });
         data["Add_By"] = Add_By
         const Data = new Card_schema(data)

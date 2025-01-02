@@ -19,7 +19,7 @@ const registration_control = async (req, res) => {
         let data = req.body;
         const hash_password = bcrypt.hashSync(data["password"], saltRounds)
         data["password"] = hash_password
-        data["role"] = "admin"
+        // data["role"] = "admin"
         const newUser = new userSchema(data);
         const response = await newUser.save();
         res.send(response)

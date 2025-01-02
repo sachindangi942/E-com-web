@@ -225,7 +225,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import { Badge, Drawer, Popconfirm } from "antd";
+import { Badge, Drawer, Modal} from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { MdAddShoppingCart } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
@@ -237,9 +237,10 @@ import "./headerStyle.css";
 
 function HeaderNav() {
   const cartData = useSelector(state => state.cart.Product);
-  console.log("cartData",cartData)
+  console.log("cartData", cartData)
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const token = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -286,6 +287,17 @@ function HeaderNav() {
     setIsDrawerVisible(false);
   };
 
+  const showModal = () => {
+    setIsModalVisible(true);
+  }
+
+  const handleOk = () => {
+    handleLogout();
+    setIsModalVisible(false);
+  }
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  }
   return (
     <Navbar expand="lg" className="mb-4 shadow-sm p-3 bg-light">
       <Container fluid>
@@ -382,17 +394,24 @@ function HeaderNav() {
             Change Password
           </Nav.Link>
         </Nav>
-        <Popconfirm
-          title="Are you sure you want to log out?"
-          onConfirm={handleLogout}
-          okText="Yes"
-          cancelText="No"
+        <Nav.Link as="button"
+          className="text-primary"
+          onClick={()=>{showModal();closeDrawer();}}
         >
-          <Nav.Link as="button" className="text-primary">
-            Logout
-          </Nav.Link>
-        </Popconfirm>
+          Logout
+        </Nav.Link>
+
       </Drawer>
+      <Modal
+        title="Are you sure you want to Logout ? "
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        okText="Yes"
+        cancelText="No"
+      >
+        <p>Click Yes to confirm Logout.</p>
+      </Modal>
     </Navbar>
   );
 }
