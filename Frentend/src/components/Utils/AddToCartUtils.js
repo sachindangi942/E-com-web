@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export const AddToCardUtil = async ( DOMAIN, token ,{ _id, name, price, description, image,}) => {
-    let CartProduct = { name, price, description, _id, image };
+export const AddToCardUtil = async ( DOMAIN, token ,{ _id:id, name, price, description, image,}) => {
+    let CartProduct = { name, price, description, id, image };
     try {
         const res = await axios.post(
             `${DOMAIN}products/addToCard`,

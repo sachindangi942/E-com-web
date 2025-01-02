@@ -15,7 +15,7 @@ const { Meta } = Card;
 export const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const cartData = useSelector((state) => state.cart.Product.map(({ _id }) => _id));
+  const cartData = useSelector((state) => state.cart.Product.map(({ id }) => id));
   let token = useSelector((state) => state.auth.token);
   token = JSON.parse(token);
   const dispatch = useDispatch();
@@ -128,15 +128,15 @@ export const Home = () => {
                   }}
                 >
                   <Button
+                  className={Object.values(cartData).includes(obj._id) ? "btn-view-details" : "btn-add-cart"}
                     style={{ flex: 1, marginRight: 5 }}
-                    className="btn-add-cart"
                     onClick={() => {
                       if(!Object.values(cartData).includes(obj._id))
                      { handleAddToCard(obj)}
                     }}
                   >
                     {Object.values(cartData).includes(obj._id) ? <Link to={"/cartdata"}
-                    className='text-decoration-none'
+                    className='text-decoration-none text-info'
                     >
                       View in Cart
                     </Link> : 'Add to Cart'}

@@ -237,7 +237,6 @@ import "./headerStyle.css";
 
 function HeaderNav() {
   const cartData = useSelector(state => state.cart.Product);
-  console.log("cartData", cartData)
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
