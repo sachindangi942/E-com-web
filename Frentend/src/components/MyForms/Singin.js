@@ -8,12 +8,13 @@ import Login_val from "../../Validations/Login_Val";
 import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { setToken } from "../../Redux/Fetures/Authslice";
-import { hideloading, showloading } from "../../Redux/AlertSclice";
 import { setErr } from "../../Redux/Fetures/ErrSlice";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const Singin = () => {
     const [usrdata, setUsrData] = useState({})
-    // const [err, setErr] = useState({})
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const err = useSelector(state => state.err.err)
@@ -39,19 +40,18 @@ const Singin = () => {
                 return dispatch(setErr(errObj));
             }
             dispatch(setErr({}));
-            dispatch(showloading())
+            setLoading(true);
             const res = await axios.post(`${DOMAIN}user/login`, usrdata,);
-            dispatch(hideloading())
+            setLoading(false);
             if (res?.status === 200 ?? res.data.token) {
                 const token = JSON.stringify(res.data.token);
                 const username = res.data.user.Email
-                dispatch(setToken({token,username}));
-                // localStorage.setItem("token",JSON.stringify(res.data.token))
+                dispatch(setToken({ token, username }));
                 navigate("/")
             }
 
         } catch (error) {
-            dispatch(hideloading())
+            setLoading(false);
             if (error.response) {
                 dispatch(setErr(error.response.data));
             } else {
@@ -74,13 +74,19 @@ const Singin = () => {
             <MyInput
                 placeholder="Enter password"
                 id="password"
-                type = "password"
+                type="passwo-rd"
                 onChange={onChangeData}
                 err={err}
             />
 
             <br />
-            <Button className="bg-info" onClick={login}>Login</Button>
+            <Button
+            disabled = {loading}
+             className={loading ? "btn border border-info w-25" : " btn btn-info border border-info w-25"}
+              onClick={login}
+              >
+             {loading ? <Spin indicator={<LoadingOutlined spin  className="text-info"/>}/> : "Login"}
+            </Button>
             <Link className="m-4" to={"/forgotpassword"}>forgot password</Link>
             <br />
             <br />

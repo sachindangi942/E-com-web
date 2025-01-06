@@ -5,13 +5,10 @@ import Registration_Val from "../../Validations/Registration_Val";
 import axios from "axios";
 import { DOMAIN } from "./Configs";
 import { Link, useNavigate } from "react-router-dom";
-
-
-
 import Box from '@mui/material/Box';
 import { Button } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { hideloading, showloading } from "../../Redux/AlertSclice";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 
 
@@ -19,7 +16,7 @@ const MyForm = () => {
     const navigate = useNavigate();
     const [usrData, setUsrData] = useState({})
     const [err, setErr] = useState({})
-    const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
 
     const onChangeEvent = (obj) => {
         setErr("")
@@ -43,9 +40,9 @@ const MyForm = () => {
 
             }
             setErr("")
-            dispatch(showloading());
+            setLoading(true);
             const res = await axios.post(`${DOMAIN}user/registration`, value)
-            dispatch(hideloading());
+            setLoading(false);
             if (res.data) navigate("/singIn");
             setErr(res.message);
 
@@ -53,7 +50,6 @@ const MyForm = () => {
             if (err.response?.data) {
                 const errorData = err.response.data;
 
-                // Check if errorData is a string and can be matched
                 if (typeof errorData === 'string') {
                     const match = errorData.match(/dup key: \{ (\w+): "(.*?)"/);
                     if (match) {
@@ -64,13 +60,11 @@ const MyForm = () => {
                         setErr({ general: 'An unknown error occurred' });
                     }
                 }
-                // If errorData is an object
                 else if (typeof errorData === 'object' && errorData.keyValue) {
                     const field = Object.keys(errorData.keyValue)[0];
                     const value = errorData.keyValue[field];
                     setErr({ [field]: ` "${value}" is already exist` });
                 }
-                // Fallback for unknown formats
                 else {
                     setErr({ general: 'Error format is not recognized' });
                 }
@@ -83,54 +77,6 @@ const MyForm = () => {
     };
 
     return (
-        // <div className="form-container">
-        //     <h5>Registration Form</h5>
-        //     <br></br>
-        //     <div>
-        //         <MyInput
-        //             placeholder="Enter Name"
-        //             id="Name"
-        //             onChange={onChangeEvent}
-        //             err={err}
-        //         />
-        //         <MyInput
-        //             placeholder="Enter Email"
-        //             id="Email"
-        //             type="email"
-        //             onChange={onChangeEvent}
-        //             err={err}
-        //         />
-        //         <MyInput
-        //             placeholder="Enter Mobile"
-
-        //             id="Mobile"
-        //             type="number"
-        //             onChange={onChangeEvent}
-        //             err={err}
-        //         />
-        //         <MyInput
-        //             placeholder="Enter password"
-
-        //             id="password"
-        //             type="password"
-        //             onChange={onChangeEvent}
-        //             err={err}
-        //         />
-        //         <MyInput
-        //             placeholder="Enter confirm Password"
-
-        //             id="confirmPassword"
-        //             type="password"
-        //             onChange={onChangeEvent}
-        //             err={err}
-        //         />
-        //         <button className="form-button" onClick={Registration}>SingUp</button>
-        //         <br />
-        //         <br />
-        //         <Link to={"/singIn"}>if already Registerd Please click to login</Link>
-        //     </div>
-        // </div>
-
         <Box component="form"
             className="mb-4"
             sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
@@ -177,13 +123,14 @@ const MyForm = () => {
                     err={err}
                 />
                 <Button
-                    variant="standard"
-                    className="bg-info"
+                    disabled={loading}
+                    className={loading ? "btn border border-info w-25" : " btn btn-info border border-info "}
                     size="large"
-                    onClick={Registration}>Register
+                    onClick={Registration}>
+                    {loading ?<Spin indicator={<LoadingOutlined spin  className="text-info"/>}/>: "Register"}
                 </Button>
                 <br />
-                <br/>
+                <br />
                 <Link to={"/singIn"}>Existing user? Sign in here</Link>
             </div>
         </Box>

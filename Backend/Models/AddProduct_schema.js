@@ -1,4 +1,3 @@
-const { required } = require("joi");
 const mongoose = require("mongoose");
 
 const Addproduct_schema = new mongoose.Schema({
@@ -21,7 +20,7 @@ const Addproduct_schema = new mongoose.Schema({
   
       },
       Add_By:{type:String},
-      _id:{type:String}
+      // _id:{type:String}
       
 });
 

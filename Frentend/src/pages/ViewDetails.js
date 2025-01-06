@@ -82,7 +82,7 @@ export const ViewDetails = () => {
                                 {Product.find((item)=> item.id === ProductDetails._id) ? <Link to={"/cartdata"}
                                 className=" w-100 text-decoration-none text-info"
                                 >
-                                    View in Cart
+                                    Edit in Cart
                                 </Link> : 'Add to Cart'}
                             </Button>
                         </Col>

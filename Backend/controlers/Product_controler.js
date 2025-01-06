@@ -4,10 +4,8 @@ const Card_schema = require("../Models/AddToCard_schema");
 const AddProduct = require("../Models/AddProduct_schema");
 
 exports.AddProduct_controler = async (req, res) => {
-    console.log(req.body)
     try {
         let data = req.body
-        delete data.id;
         const { _id: Add_By } = getToken_data({ headers: req.headers });
         data["Add_By"] = Add_By
         const Data = new AddProduct(data)
