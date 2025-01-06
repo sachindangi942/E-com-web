@@ -44,7 +44,8 @@ exports.AddToCard_controler = async (req, res) => {
 exports.GetCart_controler = async (req, res) => {
     try {
         const { _id: Add_By } = getToken_data({ headers: req.headers });
-        const getData = await Card_schema.find({ Add_By });
+        const getData = await Card_schema.find({Add_By});
+        if(!getData) return res.status(401).send("NO products in cart");
         res.send(getData)
     } catch (err) {
         res.status(401).send(err)

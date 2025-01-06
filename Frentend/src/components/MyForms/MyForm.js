@@ -22,6 +22,7 @@ const MyForm = () => {
     const dispatch = useDispatch();
 
     const onChangeEvent = (obj) => {
+        setErr("")
         setUsrData((lastValue) => {
             lastValue[obj.id] = obj.value;
             return { ...lastValue }
@@ -182,6 +183,7 @@ const MyForm = () => {
                     onClick={Registration}>Register
                 </Button>
                 <br />
+                <br/>
                 <Link to={"/singIn"}>Existing user? Sign in here</Link>
             </div>
         </Box>

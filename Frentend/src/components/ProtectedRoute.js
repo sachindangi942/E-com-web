@@ -3,7 +3,7 @@ import {  Navigate } from "react-router-dom";
 
 export const ProtectedRoute = ({children}) => {
     const token = useSelector((state)=>state.auth.token)
-    if (!token) return <Navigate to="/registration" />
+    if (!token) return <Navigate to="/singIn" />
     return children;
    
 

@@ -19,6 +19,7 @@ const Singin = () => {
     const err = useSelector(state => state.err.err)
 
     const onChangeData = (obj) => {
+        dispatch(setErr(""))
         setUsrData((lastValue) => {
             lastValue[obj.id] = obj.value;
             return lastValue;
@@ -43,7 +44,8 @@ const Singin = () => {
             dispatch(hideloading())
             if (res?.status === 200 ?? res.data.token) {
                 const token = JSON.stringify(res.data.token);
-                dispatch(setToken(token));
+                const username = res.data.user.Email
+                dispatch(setToken({token,username}));
                 // localStorage.setItem("token",JSON.stringify(res.data.token))
                 navigate("/")
             }

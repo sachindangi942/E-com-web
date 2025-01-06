@@ -40,7 +40,7 @@ const login_control = async (req, res) => {
             if (isMatch_password) {
                 const data = { Email, _id, role }
                 const token = create_token({ data },);
-                return res.send({ token, msg: "login successfull" });
+                return res.send({ token,user:db_data });
             }
         }
         res.status(401).send("invalid userName and password");

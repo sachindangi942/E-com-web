@@ -14,6 +14,7 @@ export const fetchCartData = async (token, DOMAIN) => {
         return { updatedData, totalBill };
     } catch (error) {
         console.error("Error fetching cart data:", error);
+        return {error};
     }
 };
 

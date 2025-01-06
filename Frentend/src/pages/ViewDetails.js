@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 export const ViewDetails = () => {
     const dispatch = useDispatch();
     const ProductDetails = useSelector(state => state.cart.Details);
-    const cartData = useSelector((state) => state.cart.Product.map(({ id }) => id));
+    const {Product}  = useSelector((state)=>state.cart)
     let token = useSelector(state => state.auth.token);
     token = JSON.parse(token);
 
@@ -69,18 +69,18 @@ export const ViewDetails = () => {
                                 ₹{ProductDetails.price}
                             </div>
                             <Button
-                            className = {!Object.values(cartData).includes(ProductDetails._id)?
+                            className = {!Product.find((item)=> item.id === ProductDetails._id)?
                                  "bg-warning btn-warning rounded-pill w-100 rounded" :
                                  "rounded rounded-pill w-100 fw-bold text-muted"
                                 }
                                 onClick={() => {
-                                    if (!Object.values(cartData).includes(ProductDetails._id)) {
+                                    if (!Product.find((item)=> item.id === ProductDetails._id)) {
                                         handleAddToCard();
                                     }
                                 }}
                             >
-                                {Object.values(cartData).includes(ProductDetails._id) ? <Link to={"/cartdata"}
-                                className="text-decoration-none text-info"
+                                {Product.find((item)=> item.id === ProductDetails._id) ? <Link to={"/cartdata"}
+                                className=" w-100 text-decoration-none text-info"
                                 >
                                     View in Cart
                                 </Link> : 'Add to Cart'}

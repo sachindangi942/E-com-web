@@ -341,7 +341,7 @@ export const Cart = () => {
 
             <Modal
                 title="Are you sure you want to remove this product?"
-                visible={isModalVisible}
+                open={isModalVisible}
                 onOk={handleOk}
                 onCancel={handleCancel}
                 okText="Yes"

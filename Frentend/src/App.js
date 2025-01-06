@@ -22,7 +22,7 @@ import { ViewDetails } from "./pages/ViewDetails";
 function App() {
   const { loading } = useSelector(state => state.alert);
   return (
-    <Router future={{ v7_relativeSplatPath: true }}>
+    <Router future={{ v7_startTransition: true }}>
       <HeaderNav />
       {loading ? <Spiner /> :
         <Routes>
