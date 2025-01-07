@@ -9,17 +9,22 @@ import Box from '@mui/material/Box';
 import { Button } from "@mui/material";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { setErr } from "../../Redux/Fetures/ErrSlice";
+import { Loading } from "../../Redux/Fetures/LoadingSlice";
 
 
 
 const MyForm = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [usrData, setUsrData] = useState({})
-    const [err, setErr] = useState({})
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
+    const err = useSelector(state => state.err.err);
+    const { loading } = useSelector(state => state.loading);
 
     const onChangeEvent = (obj) => {
-        setErr("")
+        dispatch(setErr(""))
         setUsrData((lastValue) => {
             lastValue[obj.id] = obj.value;
             return { ...lastValue }
@@ -36,17 +41,17 @@ const MyForm = () => {
                 error.details.forEach((detail) => {
                     errObj[detail.path[0]] = detail.message;
                 });
-                return setErr(errObj);
+                return dispatch(setErr(errObj));
 
             }
-            setErr("")
-            setLoading(true);
+            dispatch(Loading(true));
             const res = await axios.post(`${DOMAIN}user/registration`, value)
-            setLoading(false);
+            dispatch(Loading(false));
             if (res.data) navigate("/singIn");
-            setErr(res.message);
+            dispatch(setErr(res.message))
 
         } catch (err) {
+            dispatch(Loading(false));
             if (err.response?.data) {
                 const errorData = err.response.data;
 
@@ -55,21 +60,21 @@ const MyForm = () => {
                     if (match) {
                         const field = match[1];
                         const value = match[2];
-                        setErr({ [field]: ` "${value}" is already exist` });
+                        dispatch(setErr({ [field]: ` "${value}" is already exist` }))
                     } else {
-                        setErr({ general: 'An unknown error occurred' });
+                        dispatch(setErr({ general: 'An unknown error occurred' }));
                     }
                 }
                 else if (typeof errorData === 'object' && errorData.keyValue) {
                     const field = Object.keys(errorData.keyValue)[0];
                     const value = errorData.keyValue[field];
-                    setErr({ [field]: ` "${value}" is already exist` });
+                    dispatch(setErr({ [field]: ` "${value}" is already exist` }));
                 }
                 else {
-                    setErr({ general: 'Error format is not recognized' });
+                    dispatch(setErr({ general: 'Error format is not recognized' }));
                 }
             } else {
-                setErr({ general: 'Failed to connect to the server' });
+                dispatch(setErr({ general: 'Failed to connect to the server' }));
             }
         }
 
@@ -127,7 +132,7 @@ const MyForm = () => {
                     className={loading ? "btn border border-info w-25" : " btn btn-info border border-info "}
                     size="large"
                     onClick={Registration}>
-                    {loading ?<Spin indicator={<LoadingOutlined spin  className="text-info"/>}/>: "Register"}
+                    {loading ? <Spin indicator={<LoadingOutlined spin className="text-info" />} /> : "Register"}
                 </Button>
                 <br />
                 <br />

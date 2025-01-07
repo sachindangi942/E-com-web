@@ -10,6 +10,7 @@ import FormReducer from "./Fetures/Formslice";
 import ErrReducer from "./Fetures/ErrSlice"
 import CartReducer from "./Fetures/CartSlice";
 import productReducer from "./Fetures/ProductsSlice"
+import LoadingReducer from "./Fetures/LoadingSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -17,12 +18,13 @@ const rootReducer = combineReducers({
   alert:AlertReducer,
   err: ErrReducer,
   cart:CartReducer,
-  product:productReducer
+  product:productReducer,
+  loading: LoadingReducer
 });
 const persistConfig = {
   key: "root",
   storage,
-  blacklist:["alert","err","form","product"]
+  blacklist:["alert","err","form","product","loading"]
 };
 
 const persistreducer = persistReducer(persistConfig, rootReducer);

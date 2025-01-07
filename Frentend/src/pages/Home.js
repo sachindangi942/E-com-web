@@ -10,12 +10,14 @@ import { fetchCartData } from '../components/Utils/CartApiUtils';
 import { Details } from '../Redux/Fetures/CartSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { AddToCardUtil } from '../components/Utils/AddToCartUtils';
+import { LoadingOutlined } from '@ant-design/icons';
 const { Meta } = Card;
 
 export const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const {Product} = useSelector((state) => state.cart);
+  const [buttonLoadin, setButtonLoading] = useState({})
+  const { Product } = useSelector((state) => state.cart);
   let token = useSelector((state) => state.auth.token);
   token = JSON.parse(token);
   const dispatch = useDispatch();
@@ -56,6 +58,7 @@ export const Home = () => {
 
   const handleAddToCard = useCallback(async (obj) => {
     try {
+      setButtonLoading((prev) => ({ ...prev, [obj._id]: true }));
       const { data } = await AddToCardUtil(DOMAIN, token, obj);
       dispatch(addToCart(data));
       notification.success({
@@ -65,12 +68,16 @@ export const Home = () => {
         duration: 3,
       });
     } catch (error) {
+      setLoading(false);
       notification.error({
         message: 'Server Error',
         description: 'Something went wrong',
         placement: 'topRight',
         duration: 3,
       });
+    }
+    finally {
+      setButtonLoading((prev) => ({ ...prev, [obj._id]: false }));
     }
   }, [token, dispatch])
 
@@ -132,17 +139,22 @@ export const Home = () => {
                   }}
                 >
                   <Button
-                    className={Product.find(({id})=> id === obj._id) ? "btn-view-details" : "btn-add-cart"}
+                    disabled={buttonLoadin[obj._id]}
+                    className={Product.find(({ id }) => id === obj._id) ? "btn-view-details" : "btn-add-cart"}
                     style={{ flex: 1, marginRight: 5 }}
                     onClick={() => {
-                      if (!Product.find(({id})=> id === obj._id)) { handleAddToCard(obj) }
+                      if (!Product.find(({ id }) => id === obj._id)) { handleAddToCard(obj) }
                     }}
                   >
-                    {Product.find(({id})=> id === obj._id) ? <Link to={"/cartdata"}
-                      className='text-decoration-none text-info'
-                    >
-                      Edit in Cart
-                    </Link> : 'Add to Cart'}
+
+                    {
+                      buttonLoadin[obj._id] ? <Spin indicator={<LoadingOutlined />} /> :
+                        Product.find(({ id }) => id === obj._id) ? <Link to={"/cartdata"}
+                          className='text-decoration-none text-info'
+                        >
+                          Edit in Cart
+                        </Link> : 'Add to Cart'
+                    }
                   </Button>
                   <Button
                     type="default"

@@ -179,7 +179,7 @@ import { DOMAIN } from '../components/MyForms/Configs';
 import { Col, Container, Row } from 'react-bootstrap';
 import { Button, Card, Image, notification, Modal, Spin } from 'antd';
 import Meta from 'antd/es/card/Meta';
-import { PlusOutlined, MinusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { PlusOutlined, MinusOutlined, DeleteOutlined, LoadingOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeFromCart } from '../Redux/Fetures/CartSlice';
@@ -194,6 +194,7 @@ export const Cart = () => {
     const [totalBill, setTotalBill] = useState(0);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [productToRemove, setProductToRemove] = useState(null);
+    const [buttonLoadin, setButtonLoading] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
@@ -212,23 +213,31 @@ export const Cart = () => {
     }, [token]);
 
     const handleQuantityChange = async (_id, delta) => {
-        await updateProductQuantity(_id, delta, token, DOMAIN, setCardData, setTotalBill);
+        try {
+            setButtonLoading((prev) => ({ ...prev, [_id]: true }))
+            await updateProductQuantity(_id, delta, token, DOMAIN, setCardData, setTotalBill);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setButtonLoading((prev) => ({ ...prev, [_id]: false }));
+        }
+
     };
 
     const showModal = (product) => {
-        setProductToRemove(product);  
-        setIsModalVisible(true); 
+        setProductToRemove(product);
+        setIsModalVisible(true);
     };
 
     const handleOk = async () => {
         if (productToRemove) {
-            await RemoveProducts(productToRemove); 
+            await RemoveProducts(productToRemove);
         }
-        setIsModalVisible(false);  
+        setIsModalVisible(false);
     };
 
     const handleCancel = () => {
-        setIsModalVisible(false);  
+        setIsModalVisible(false);
     };
 
     const RemoveProducts = async ({ _id }) => {
@@ -295,7 +304,8 @@ export const Cart = () => {
                                         <div className="d-flex justify-content-between align-items-center mt-2">
                                             {obj.quantity > 1 ? (
                                                 <Button
-                                                    icon={<MinusOutlined />}
+                                                    disabled={buttonLoadin[obj._id]}
+                                                    icon={buttonLoadin[obj._id] ? <Spin indicator={<LoadingOutlined />} /> : <MinusOutlined />}
                                                     type="primary"
                                                     danger
                                                     onClick={() => handleQuantityChange(obj._id, -1)}
@@ -305,14 +315,15 @@ export const Cart = () => {
                                                     icon={<DeleteOutlined />}
                                                     type="primary"
                                                     danger
-                                                    onClick={() => showModal(obj)} 
+                                                    onClick={() => showModal(obj)}
                                                 />
                                             )}
                                             <div className="px-3 fw-bold text-secondary">
                                                 {obj.quantity}
                                             </div>
                                             <Button
-                                                icon={<PlusOutlined />}
+                                                disabled={buttonLoadin[obj._id]}
+                                                icon={buttonLoadin[obj._id] ? <Spin indicator={<LoadingOutlined />} /> : <PlusOutlined />}
                                                 type="primary"
                                                 onClick={() => handleQuantityChange(obj._id, 1)}
                                             />

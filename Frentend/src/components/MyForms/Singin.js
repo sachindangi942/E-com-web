@@ -11,13 +11,14 @@ import { setToken } from "../../Redux/Fetures/Authslice";
 import { setErr } from "../../Redux/Fetures/ErrSlice";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
+import { Loading } from "../../Redux/Fetures/LoadingSlice";
 
 const Singin = () => {
     const [usrdata, setUsrData] = useState({})
-    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const err = useSelector(state => state.err.err)
+    const err = useSelector(state => state.err.err);
+    const {loading} = useSelector(state=>state.loading)
 
     const onChangeData = (obj) => {
         dispatch(setErr(""))
@@ -40,9 +41,9 @@ const Singin = () => {
                 return dispatch(setErr(errObj));
             }
             dispatch(setErr({}));
-            setLoading(true);
+            dispatch(Loading(true));
             const res = await axios.post(`${DOMAIN}user/login`, usrdata,);
-            setLoading(false);
+            dispatch(Loading(false))
             if (res?.status === 200 ?? res.data.token) {
                 const token = JSON.stringify(res.data.token);
                 const username = res.data.user.Email
@@ -51,7 +52,7 @@ const Singin = () => {
             }
 
         } catch (error) {
-            setLoading(false);
+            dispatch(Loading(false));
             if (error.response) {
                 dispatch(setErr(error.response.data));
             } else {
