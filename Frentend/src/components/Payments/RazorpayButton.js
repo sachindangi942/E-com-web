@@ -22,7 +22,7 @@ const RazorpayButton = ({amount}) => {
       return;
     }
 
-    const result = await axios.post(`${DOMAIN}api/create`);
+    const result = await axios.post(`${DOMAIN}api/create-order`,{amount});
 
     const options = {
       key: "rzp_test_3mfGBELpcMMv0w", // dashboard से
