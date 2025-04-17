@@ -75,7 +75,7 @@ const Singin = () => {
             <MyInput
                 placeholder="Enter password"
                 id="password"
-                type="passwo-rd"
+                type="password"
                 onChange={onChangeData}
                 err={err}
             />
