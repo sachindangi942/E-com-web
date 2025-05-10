@@ -17,75 +17,79 @@ import ForgotPassword from "./components/PasswordAPI/ForgotPassword";
 import { ChangePassword } from "./components/PasswordAPI/ChangePassword";
 import { Cart } from "./pages/Cart";
 import { ViewDetails } from "./pages/ViewDetails";
+import Layout from "./components/Layout";
 
 function App() {
   const { loading } = useSelector(state => state.alert);
   return (
     <Router future={{ v7_startTransition: true }}>
-      <HeaderNav />
-      {loading ? <Spiner /> :
-        <Routes>
-          <Route path="/registration" element={
-            <PublicRoute>
-              <MyForm />
-            </PublicRoute>
+      <Layout>
+        {loading ? <Spiner /> :
+          <Routes>
+            <Route path="/registration" element={
+              <PublicRoute>
+                <MyForm />
+              </PublicRoute>
 
-          } />
-          <Route path="/singIn" element={
-            <PublicRoute>
-              <Singin />
-            </PublicRoute>
+            } />
+            <Route path="/singIn" element={
+              <PublicRoute>
+                <Singin />
+              </PublicRoute>
 
-          } />
+            } />
 
-          <Route path="/" element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
+            <Route path="/" element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
 
-          } />
-          <Route path="/changePassword" element={
-            <ProtectedRoute>
-              <ChangePassword />
-            </ProtectedRoute>
-          } />
+            } />
+            <Route path="/changePassword" element={
+              <ProtectedRoute>
+                <ChangePassword />
+              </ProtectedRoute>
+            } />
 
-          <Route path="/addProduct" element={
-            <ProtectedRoute>
-              <AddProduct />
-            </ProtectedRoute>
-          } />
+            <Route path="/addProduct" element={
+              <ProtectedRoute>
+                <AddProduct />
+              </ProtectedRoute>
+            } />
 
-          <Route path="/listProduct" element={
-            <ProtectedRoute>
-              <ProductList />
-            </ProtectedRoute>
-          } />
-          <Route path="/createuser" element={
-            <ProtectedRoute>
-              <CreateUser />
-            </ProtectedRoute>
-          } />
+            <Route path="/listProduct" element={
+              <ProtectedRoute>
+                <ProductList />
+              </ProtectedRoute>
+            } />
+            <Route path="/createuser" element={
+              <ProtectedRoute>
+                <CreateUser />
+              </ProtectedRoute>
+            } />
 
-          <Route path="/showusers" element={
-            <ProtectedRoute>
-              <Showusers />
-            </ProtectedRoute>
-          } />
-          <Route path="/cartdata" element={
-            <ProtectedRoute>
-              <Cart />
-            </ProtectedRoute>
-          } />
-          <Route path="/viewDetails" element={
-            <ProtectedRoute>
-              <ViewDetails/>
-            </ProtectedRoute>
-          } />
-          <Route path="/forgotPassword" element={<ForgotPassword />} />
-          <Route path="*" element={<PageNoteFound />} />
-        </Routes>
-      }
+            <Route path="/showusers" element={
+              <ProtectedRoute>
+                <Showusers />
+              </ProtectedRoute>
+            } />
+            <Route path="/cartdata" element={
+              <ProtectedRoute>
+                <Cart />
+              </ProtectedRoute>
+            } />
+            <Route path="/viewDetails" element={
+              <ProtectedRoute>
+                <ViewDetails />
+              </ProtectedRoute>
+            } />
+            <Route path="/forgotPassword" element={<ForgotPassword />} />
+            <Route path="*" element={<PageNoteFound />} />
+          </Routes>
+        }
+      </Layout>
+      {/* <HeaderNav /> */}
+
     </Router>
   );
 }

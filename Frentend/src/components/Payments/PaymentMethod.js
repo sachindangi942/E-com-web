@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import RazorpayButton from "./RazorpayButton";
 import "bootstrap/dist/css/bootstrap.min.css";
 import PaymentPage from "./PaymentPage";
+import { useDispatch } from "react-redux";
+import { currentSteps } from "../../Redux/Fetures/CheckoutSteps";
 
 const PaymentMethod = ({ price, discount = 20 }) => {
   const [method, setMethod] = useState("cod");
   const [paymentMethod,setPaymentMethod] = useState();
   const onlineDiscount = 181;
   const finalAmount = price - (method === "online" ? onlineDiscount : 0) - discount;
+  const dispatch = useDispatch();
 
   const handleSuccess = (res) => {
     console.log("Payment Successful:", res);
@@ -162,7 +165,9 @@ const PaymentMethod = ({ price, discount = 20 }) => {
                   // />
                   <PaymentPage amount={finalAmount}/>
                 ) : (
-                  <button className="btn btn-primary w-100">Continue with COD</button>
+                  <button className="btn btn-primary w-100"
+                  onClick={()=>dispatch(currentSteps(3))}
+                  >Continue with COD</button>
                 )}
               </div>
             </div>

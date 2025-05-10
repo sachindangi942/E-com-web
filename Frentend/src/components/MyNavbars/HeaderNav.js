@@ -83,7 +83,7 @@ function HeaderNav() {
       <Container fluid>
 
         <Navbar.Brand as={Link} to="/" className="fw-bold text-primary">
-          MyShop
+          Smart Market
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" className="border-0" />
 

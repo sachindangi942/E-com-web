@@ -694,10 +694,9 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeFromCart } from '../Redux/Fetures/CartSlice';
 import { fetchCartData, updateProductQuantity } from '../components/Utils/CartApiUtils';
-import CheckoutSteps from '../components/CheckoutSteps';
 import AddressForm from '../components/AddressForm';
 import PaymentMethod from '../components/Payments/PaymentMethod';
-import PaymentPage from '../components/Payments/PaymentPage';
+import { currentSteps } from '../Redux/Fetures/CheckoutSteps';
 
 const { Title, Text } = Typography;
 
@@ -705,6 +704,8 @@ export const Cart = () => {
     const dispatch = useDispatch();
     let token = useSelector(state => state.auth.token);
     token = JSON.parse(token);
+    const currentStep = useSelector(state=>state.steps);
+    console.log("steps",currentStep)
 
     const [cartData, setCardData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -714,7 +715,7 @@ export const Cart = () => {
     const [buttonLoading, setButtonLoading] = useState({});
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [orderDetails, setOrderDetails] = useState(null);
-    const [currentStep, setCurrentStep] = useState(0);
+    // const [currentStep, setCurrentStep] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -799,13 +800,12 @@ export const Cart = () => {
     const handlePaymentSuccess = (orderDetails) => {
         setPaymentSuccess(true);
         setOrderDetails(orderDetails);
-        setCurrentStep(3);
+        // setCurrentStep(3);
+        dispatch(currentSteps(3));
     };
 
     return (
         <Container className="py-4">
-            <CheckoutSteps currentStep={currentStep} />
-
             {loading ? (
                 <div className="text-center" style={{ margin: '100px 0' }}>
                     <Spin size="large" tip="Loading your cart..." />
@@ -817,7 +817,7 @@ export const Cart = () => {
                         imageStyle={{ height: 100 }}
                         description={<Text type="secondary">Your cart is empty. Start shopping now!</Text>}
                     >
-                        <Button type="primary" href="/products">Browse Products</Button>
+                        <Button type="primary" href="/">Browse Products</Button>
                     </Empty>
                 </div>
             ) : currentStep === 0 ? (
@@ -912,7 +912,7 @@ export const Cart = () => {
                                     type="primary"
                                     size="large"
                                     block
-                                    onClick={() => setCurrentStep(1)}
+                                    onClick={() => dispatch(currentSteps(1))}
                                     className="mt-3"
                                 >
                                     Proceed to Checkout
@@ -923,12 +923,13 @@ export const Cart = () => {
                             </Card>
                         </Col>
                     </Row>
+        
                 </>
             ) : currentStep === 1 ? (
                 <div className="px-2">
                     <Title level={3}>Delivery Address</Title>
                     <AddressForm />
-                    <Button type="primary" onClick={() => setCurrentStep(2)} className="mt-3">
+                    <Button type="primary" onClick={() => dispatch(currentSteps(2))} className="mt-3">
                         Continue to Payment
                     </Button>
                 </div>
@@ -943,7 +944,7 @@ export const Cart = () => {
                     <Title level={3} type="success">Order Successful!</Title>
                     <Text>Your order has been placed successfully. Order details:</Text>
                     <pre>{JSON.stringify(orderDetails, null, 2)}</pre>
-                    <Button type="primary" href="/products">Continue Shopping</Button>
+                    <Button type="primary" href="/">Continue Shopping</Button>
                 </div>
             )}
 

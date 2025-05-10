@@ -7,32 +7,34 @@ import authReducer from "./Fetures/Authslice"
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import FormReducer from "./Fetures/Formslice";
-import ErrReducer from "./Fetures/ErrSlice"
+import ErrReducer from "./Fetures/ErrSlice";
 import CartReducer from "./Fetures/CartSlice";
-import productReducer from "./Fetures/ProductsSlice"
+import productReducer from "./Fetures/ProductsSlice";
 import LoadingReducer from "./Fetures/LoadingSlice";
+import CheckoutReducer from "./Fetures/CheckoutSteps";
 
 const rootReducer = combineReducers({
   auth: authReducer,
   form: FormReducer,
-  alert:AlertReducer,
+  alert: AlertReducer,
   err: ErrReducer,
-  cart:CartReducer,
-  product:productReducer,
-  loading: LoadingReducer
+  cart: CartReducer,
+  product: productReducer,
+  loading: LoadingReducer,
+  steps: CheckoutReducer,
 });
 const persistConfig = {
   key: "root",
   storage,
-  blacklist:["alert","err","form","product","loading"]
+  blacklist: ["alert", "err", "form", "product", "loading","steps"]
 };
 
 const persistreducer = persistReducer(persistConfig, rootReducer);
 
 const Store = configureStore({
-  reducer:  persistreducer,
-    
-  
+  reducer: persistreducer,
+
+
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,

@@ -27,7 +27,7 @@ const PaymentPage = ({amount}) => {
     }
 const result = await axios.post(`${DOMAIN}api/create-order`,{amount})
     const options = {
-      key: "rzp_test_3mfGBELpcMMv0w", // <-- apni test key daalein
+      key: " rzp_live_Gw4otHaiQgCHaI", // <-- apni test key daalein
       amount: result.data.amount,
       currency: result.data.currency,
       name: "Sachin Dangi",
