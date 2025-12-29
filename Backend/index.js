@@ -9,11 +9,11 @@ const paymentRouter = require("./routes/Payment_router")
 
 const port = process.env.PORT || 7001 || 7002 || 7003
 App.use(express.json());
-App.use(cors());
-// App.use(cors({
-//     origin:"http://mycomweb.s3-website.ap-south-1.amazonaws.com",
-//     methods: ['GET', 'POST'],
-// }))
+// App.use(cors());
+App.use(cors({
+    origin:"https://e-com-web-opal.vercel.app",
+    methods: ['GET', 'POST'],
+}))
 
 
 App.use("/user",registration);
