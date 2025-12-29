@@ -9,6 +9,7 @@ const db_connection =async()=>{
         console.log(`connection successfull`.rainbow);
 
     } catch (error) {
+        console.log("err",error)
         console.log(`connection failed`.red)
     }
 

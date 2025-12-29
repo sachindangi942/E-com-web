@@ -50,7 +50,7 @@ function HeaderNav() {
 
   const handleLogout = () => {
     dispatch(showloading());
-    navigate("/singIn")
+    navigate("/")
     dispatch(clearToken());
     dispatch(clearCart());
     persistor.purge();

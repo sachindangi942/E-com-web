@@ -1,9 +1,7 @@
 import axios from "axios";
-import React, { useState } from "react";
 import { DOMAIN } from "../MyForms/Configs";
 
-const PaymentPage = ({amount}) => {
-  const [paymentMethod, setPaymentMethod] = useState("card");
+const PaymentPage = ({amount,paymentMethod}) => {
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -27,7 +25,7 @@ const PaymentPage = ({amount}) => {
     }
 const result = await axios.post(`${DOMAIN}api/create-order`,{amount})
     const options = {
-      key: " rzp_live_Gw4otHaiQgCHaI", // <-- apni test key daalein
+      key: " rzp_live_Gw4otHaiQgCHaI", 
       amount: result.data.amount,
       currency: result.data.currency,
       name: "Sachin Dangi",

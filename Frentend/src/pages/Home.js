@@ -30,6 +30,7 @@ export const Home = () => {
       const res = await axios.get(`${DOMAIN}products/getProducts`);
       setLoading(false);
       setProducts(res.data);
+      console.log(res.data)
     } catch (error) {
       setLoading(false);
       notification.error({
@@ -56,30 +57,70 @@ export const Home = () => {
     navigate("/viewDetails")
   }, [dispatch, navigate]);
 
+  // const handleAddToCard = useCallback(async (obj) => {
+  //   try {
+  //     setButtonLoading((prev) => ({ ...prev, [obj._id]: true }));
+  //     const { data } = await AddToCardUtil(DOMAIN, token, obj);
+  //     dispatch(addToCart(data));
+  //     notification.success({
+  //       message: 'Product Added',
+  //       description: 'Product added to cart',
+  //       placement: 'topRight',
+  //       duration: 3,
+  //     });
+  //   } catch (error) {
+  //     setLoading(false);
+  //     notification.error({
+  //       message: 'Server Error',
+  //       description: 'Something went wrong',
+  //       placement: 'topRight',
+  //       duration: 3,
+  //     });
+  //   }
+  //   finally {
+  //     setButtonLoading((prev) => ({ ...prev, [obj._id]: false }));
+  //   }
+  // }, [token, dispatch])
+
   const handleAddToCard = useCallback(async (obj) => {
+
+    // 🔐 LOGIN CHECK
+    if (!token) {
+      notification.warning({
+        message: 'Login Required',
+        description: 'Please login to add products to cart',
+        placement: 'topRight',
+        duration: 2,
+      });
+      navigate("/singIn");
+      return;
+    }
+
     try {
       setButtonLoading((prev) => ({ ...prev, [obj._id]: true }));
+
       const { data } = await AddToCardUtil(DOMAIN, token, obj);
       dispatch(addToCart(data));
+
       notification.success({
         message: 'Product Added',
         description: 'Product added to cart',
         placement: 'topRight',
         duration: 3,
       });
+
     } catch (error) {
-      setLoading(false);
       notification.error({
         message: 'Server Error',
         description: 'Something went wrong',
         placement: 'topRight',
         duration: 3,
       });
-    }
-    finally {
+    } finally {
       setButtonLoading((prev) => ({ ...prev, [obj._id]: false }));
     }
-  }, [token, dispatch])
+  }, [token, dispatch, navigate]);
+
 
   useEffect(() => {
     productData();

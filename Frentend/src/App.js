@@ -18,14 +18,16 @@ import { ChangePassword } from "./components/PasswordAPI/ChangePassword";
 import { Cart } from "./pages/Cart";
 import { ViewDetails } from "./pages/ViewDetails";
 import Layout from "./components/Layout";
+import { AppRouter } from "./routes/AppRouter";
 
 function App() {
   const { loading } = useSelector(state => state.alert);
   return (
     <Router future={{ v7_startTransition: true }}>
-      <Layout>
+      {/* <Layout>
         {loading ? <Spiner /> :
           <Routes>
+             <Route path="/" element={<Home/>}/>
             <Route path="/registration" element={
               <PublicRoute>
                 <MyForm />
@@ -36,13 +38,6 @@ function App() {
               <PublicRoute>
                 <Singin />
               </PublicRoute>
-
-            } />
-
-            <Route path="/" element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
 
             } />
             <Route path="/changePassword" element={
@@ -87,8 +82,9 @@ function App() {
             <Route path="*" element={<PageNoteFound />} />
           </Routes>
         }
-      </Layout>
-      {/* <HeaderNav /> */}
+      </Layout> */}
+      
+      <AppRouter/>
 
     </Router>
   );
